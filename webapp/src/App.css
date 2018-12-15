@@ -1,0 +1,14 @@
+.app-body {
+   display: flex;
+   justify-content: center;
+   margin: 8rem 0;
+}
+.app-sketcher{
+  margin:0 2rem;
+}
+
+.app-chart-pie{
+  margin:0 2rem;
+  width: 25rem;
+  height: 20rem;
+}

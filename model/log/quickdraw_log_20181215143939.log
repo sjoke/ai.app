@@ -1,0 +1,3 @@
+num_classes: 50, x_train shape: (40000, 784)
+None
+Test loss: 1.336, accurracy: 67.20%, top-3 accuarcy: 82.68%

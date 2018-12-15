@@ -1,0 +1,18 @@
+.sketcher-area{
+    width: 300px;   
+}
+
+.sketcher-canvas {
+     border: 0.0625rem solid #9c9c9c; 
+    height: 300px;
+}
+
+.sketcher-operations {
+    display: flex;
+    margin-top: 10px;
+    justify-content: flex-end;
+}
+
+.sketcher-primary-btn{
+    margin-left: 10px;
+}

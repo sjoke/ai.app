@@ -1,0 +1,4 @@
+INFO:root:num_classes: 53, x_train shape: (42400, 784)
+INFO:root:None
+INFO:root:loss: 1.129, Test accurracy: 71.26%, top-5 accuarcy: 90.65%
+WARNING:tensorflow:TensorFlow optimizers do not make it possible to access optimizer attributes or optimizer state after instantiation. As a result, we cannot save the optimizer as part of the model save file.You will have to compile your model again after loading it. Prefer using a Keras optimizer instead (see keras.io/optimizers).
