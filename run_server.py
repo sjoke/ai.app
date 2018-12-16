@@ -1,5 +1,6 @@
 
 # import the necessary packages
+import tensorflow as tf
 from tensorflow import keras
 import numpy as np
 from PIL import Image
@@ -38,21 +39,32 @@ def load_model():
 def predict():
     image = request.files["file"].read()
     image = Image.open(io.BytesIO(image))
-
+    image = image.convert('L').resize((image_size, image_size), Image.BILINEAR)
+    # image.save('test_image.png')
     # image = Image.open("model/sample/tooth.png")
-    image_array = np.array(image)
-    image_array = np.expand_dims(image_array, axis=0)
-    image_array = np.expand_dims(image_array, axis=3)
+    image_input = np.ones((image_size, image_size)) - np.array(image)/255.0
+    
+    image_input = np.expand_dims(image_input, axis=0)
+    image_input = np.expand_dims(image_input, axis=3)
 
-    print(image_array.shape)
-    assert len(image_array.shape) == 4
+    # print(image_input.shape)
+    assert len(image_input.shape) == 4
 
-    predictResult = {}
-    model_pred = model.predict(image_array)[0]
-    predictResult['pred'] = getPred(model_pred)
+    model_pred = model.predict(image_input)[0]
+    predictResult = getTopKPred(model_pred)
 
     return jsonify(predictResult)
 
+
+def getTopKPred(prediction, k=5):
+    pred_index = (-prediction).argsort()[:k]
+    print(pred_index)
+    processed_predicton = [{
+            'label' : class_names[idx],
+            'prob':  format(prediction[idx].item() * 100, '.2f')
+        } for idx in pred_index] 
+
+    return processed_predicton
 
 def getPred(prediction):
     pred_index = np.argmax(prediction)
@@ -66,7 +78,7 @@ def getPred(prediction):
 
 # static route
 
-@app.route('/webapp', defaults={'path': ''})
+@app.route('/', defaults={'path': ''})
 @app.route('/webapp/<path:path>')
 def serve(path):
     if(path == ""):

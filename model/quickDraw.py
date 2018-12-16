@@ -18,7 +18,7 @@ import time
 current_time = time.strftime("%Y%m%d%H%M%S", time.localtime())
 # logging.basicConfig(filename='log/quickdraw_log_{}.log'.format(current_time), level=logging.INFO)
 
-output_file = open('log/quickdraw_log_{}.log'.format(current_time), 'w')
+# output_file = open('log/quickdraw_log_{}.log'.format(current_time), 'w')
 """Download *.npz"""
 
 
@@ -29,7 +29,7 @@ def download():
     for c in classes:
         cls_url = c.replace('_', '%20')
         path = base + cls_url + '.npy'
-        print(path, file=output_file)
+        print(path)
         urllib.request.urlretrieve(path, 'data/' + c + '.npy')
 
 # download()
@@ -77,12 +77,12 @@ def load_data(root, test_ratio=0.2, max_items_per_class=10000):
     y_train = y[test_size:]
     return x_train, y_train, x_test, y_test, class_names
 
-
-x_train, y_train, x_test, y_test, class_names = load_data('data', max_items_per_class=50000)
+print('start to load data')
+x_train, y_train, x_test, y_test, class_names = load_data('data', max_items_per_class=10000)
 num_classes = len(class_names)
 image_size = 28
 
-print('num_classes: {}, x_train shape: {}'.format(num_classes, x_train.shape), file=output_file)
+print('num_classes: {}, x_train shape: {}'.format(num_classes, x_train.shape))
 assert x_train.shape[0] == y_train.shape[0]
 assert x_test.shape[0] == y_test.shape[0]
 
@@ -122,7 +122,7 @@ model.add(layers.MaxPooling2D(pool_size=(2, 2)))
 model.add(layers.Flatten())
 model.add(layers.Dense(num_classes, activation='softmax'))
 
-print(model.summary(), file=output_file)
+print(model.summary())
 
 # compile model
 adam = tf.train.AdamOptimizer()
@@ -148,8 +148,8 @@ history = model.fit(x=x_train, y=y_train, validation_split=0.1,
 score = model.evaluate(x_test, y_test, verbose=0)
 
 print('Test loss: {:.3f}, accurracy: {:.2f}%, top-{:d} accuarcy: {:0.2f}%'
-      .format(score[0], score[1] * 100, TOP_N, score[2] * 100), file=output_file)
+      .format(score[0], score[1] * 100, TOP_N, score[2] * 100))
 
 """# Inference"""
 
-model.save('quickDraw_{:.0f}percent.h5'.format(score[1] * 100))
+model.save('quickDraw_{:.2f}percent.h5'.format(score[1] * 100))
